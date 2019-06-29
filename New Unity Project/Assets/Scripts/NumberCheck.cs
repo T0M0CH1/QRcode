@@ -11,7 +11,7 @@ public class NumberCheck : MonoBehaviour
     public static InputField inputField;
     private int stringLength;
     private int stringByte;
-    private string modeJudge = "";
+    public static string modeJudge = "";
     private string binary = "";
 
     void Start()

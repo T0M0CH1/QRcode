@@ -6,22 +6,42 @@ using System;
 public class ToBinary : MonoBehaviour
 {
     private int stringDate = 0;
-    private int twoCut = 0;
+    private int twoCut = 0;    
     private char textStr = ' ';
     private string binaryString = "";
     private int remainder = 0;
-    private string remainStr;
-    // Start is called before the first frame update
+    private string remainStr = "";
+    private string binary = "";
+    private int textLength = 0;
     void Start()
     {
-        //InputFieldのテキストの長さが奇数だった場合入る。
-        if (NumberCheck.inputField.text.Length % 2 == 1)
+        //使用頻度が高いので変数を短く
+        textLength = NumberCheck.inputField.text.Length;
+        //数字モードかつInputFieldのテキストの長さが3で割れない場合入る
+        if (textLength % 3 != 0 && NumberCheck.modeJudge == "0001")
         {
-            //最後の文字を先に2進数にして取っておく
-            remainder = StringToBinary(NumberCheck.inputField.text[NumberCheck.inputField.text.Length]);            
-            remainStr = remainder.ToString();
+            if (textLength % 3 == 1)
+            {
+                textStr = NumberCheck.inputField.text[textLength];
+                remainStr = textStr.ToString();
+                remainStr.PadLeft(4, '0');
+            }
+            else if (textLength % 3 == 2)
+            {
+                remainStr = NumberCheck.inputField.text.Substring(textLength - 1, textLength);
+                remainStr.PadLeft(7, '0');
+            }
+        }
+
+        //英数字モードかつInputFieldのテキストの長さが奇数だった場合入る。
+        if (textLength % 2 == 1 && NumberCheck.modeJudge == "0010")
+        {
+            //最後の文字を先に10進数に変換する
+            remainder = StringToBinary(NumberCheck.inputField.text[textLength]);
+            //10進数に変換したものを2進数にする
+            remainStr = System.Convert.ToString(remainder, 2);
             //奇数の最後の文字は6bitで表す(余りは0詰め)
-            remainStr.PadLeft(6, '0');           
+            remainStr.PadLeft(6, '0');
         }
     }
 
@@ -31,7 +51,7 @@ public class ToBinary : MonoBehaviour
         //InputFieldのテキストの長さ分回す
         for(int i = 0; i < NumberCheck.inputField.text.Length; i++)
         {
-            //一文字ずつ2進数化していく
+            //一文字ずつ10進数化していく
             textStr = NumberCheck.inputField.text[i];            
             //仮想的に2文字ずつに分け、一文字目は45をかける。二文字目は一文字目の数字に足す。
             CalString(i, StringToBinary(textStr));
@@ -40,6 +60,7 @@ public class ToBinary : MonoBehaviour
 
     public int StringToBinary(char str)
     {
+        //文字を10進数で表す。
         switch (str)
         {
             case '0':
@@ -54,8 +75,8 @@ public class ToBinary : MonoBehaviour
         if (i % 2 == 1)
         {
             //もし奇数が最後の文字だった場合入る
-            if(i == NumberCheck.inputField.text.Length)
-            {
+            if(i == textLength)
+            {               
                 binaryString += remainStr;
                 return;
             }            
@@ -64,8 +85,10 @@ public class ToBinary : MonoBehaviour
         else if (i % 2 == 0)
         {
             twoCut += stringDate;
-            //
-            binaryString += twoCut.ToString();
+            //10進数に変換したものを2進数にする
+            binary = System.Convert.ToString(twoCut, 2);
+            //奇数の最後の文字は6bitで表す(余りは0詰め)
+            binary.PadLeft(11, '0');
             twoCut = 0;            
         }
     }
