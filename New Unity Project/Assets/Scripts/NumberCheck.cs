@@ -11,8 +11,8 @@ public class NumberCheck : MonoBehaviour
     public static InputField inputField;
     private int stringLength;
     private int stringByte;
-    public static string modeJudge = "";
-    private string binary = "";
+    public static string modeJudge;
+    private string binary;
 
     void Start()
     {
@@ -33,9 +33,9 @@ public class NumberCheck : MonoBehaviour
             if (stringLength == stringByte)
             {                
                 text.text = "QRコード作成";
-                Debug.Log(modeJudge);
-                //入力された文字数を10進数から2進数にする
-                ConvertBinary(stringLength);
+                //Debug.Log(modeJudge);
+                //入力された文字数を情報として取得
+                ConvertBinary(stringLength,modeJudge);
             }
             else
             {
@@ -70,22 +70,26 @@ public class NumberCheck : MonoBehaviour
                 modeJudge = "0001";
             }
         }
+        ToBinary.binaryString += modeJudge;
     }
 
-    private void ConvertBinary(int decimalNum)
+    public void ConvertBinary(int decimalNum, string modeSelect)
     {
-        //2進数に変換する処理
+        
+        //入力された文字数2進数に変換する処理
         binary = System.Convert.ToString(decimalNum, 2);
-
-        //英数字の場合は9bitで表す(余りは0詰め)       
-        if (modeJudge == "0010")
+        //英数字の場合は入力された文字数を9bitで表す(余りは0詰め)       
+        if (modeSelect == "0010")
         {
-            binary.PadLeft(9, '0');
+            //Debug.Log("inJudge");
+            binary = binary.PadLeft(9, '0');
         }
-        //数字のみの場合は10bitで表す(余りは0詰め)
-        if (modeJudge == "0001")
+        //数字のみの場合は入力された文字数を10bitで表す(余りは0詰め)
+        if (modeSelect == "0001")
         {
-            binary.PadLeft(10, '0');
+            binary = binary.PadLeft(10, '0');
         }
+        ToBinary.binaryString += binary;
+        Debug.Log("binaryString:" + ToBinary.binaryString);
     }
 }
