@@ -15,9 +15,9 @@ public class NumberCheck : MonoBehaviour
     private string binary;
 
     void Start()
-    {
+    {        
         inputField = this.GetComponent<InputField>();
-        inputField.ActivateInputField();
+        inputField.ActivateInputField();        
     }
    
     public void checkZenkaku()
@@ -54,9 +54,10 @@ public class NumberCheck : MonoBehaviour
     }
 
     private void StringJudge()
-    { 
+    {
+        ToBinary.binaryString = "";
         //InputFieldに打った文字分回す
-        for(int i = 1; i < stringLength; i++)
+        for (int i = 1; i < stringLength; i++)
         {
             //英数字か数字だけかを判定する処理
             if (Char.IsDigit(inputField.text, i) == false)
@@ -91,5 +92,6 @@ public class NumberCheck : MonoBehaviour
         }
         ToBinary.binaryString += binary;
         Debug.Log("binaryString:" + ToBinary.binaryString);
+        ToBinary.toBinaryBool = true;
     }
 }
